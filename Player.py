@@ -13,12 +13,13 @@ class Player(object):
 
     def add_word(self, word):
         """
-        Adds passed word to the player's word list.
+        Adds passed word to the player's word list and increases score by 1.
         :param word: string to add to word_list
         :return: Nothing.
         """
 
         self.word_list.append(word)
+        self.score += 1
 
     def add_strike(self):
         """
