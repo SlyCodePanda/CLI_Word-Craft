@@ -1,15 +1,12 @@
-import os
+import json
 import argparse
 import random
 import string
-from nltk.corpus import wordnet
 from colorama import init, Fore, Back, Style
 
 # Player class
 from player import Player
 
-
-# TODO: nltk wordnet is pretty slow, try and find a better alternative.
 
 def display_rules():
     """
@@ -77,9 +74,12 @@ def check_new_word(word, gen_letter, player_obj):
      :param player_obj: The list of words that have already been checked and added.
      :return: Nothing
     """
+
+    # Using PyDictionary to create a english dictionary to check for words.
+
     if word[0] == gen_letter:
         print("%s starts with %s" % (word, gen_letter))
-        if wordnet.synsets(word):
+        if word in dictionary:
             print('%s is a word' % word)
             if word not in player_obj.word_list:
                 print("%s is not already in you list of words." % word)
@@ -157,6 +157,12 @@ def new_game():
 if __name__ == '__main__':
 
     init()  # initializing colorama module.
+
+    ####################
+    # Dictionary      ##
+    ####################
+    dictionary = json.load(open("collection.json"))
+
 
     ####################
     # Argparse        ##
