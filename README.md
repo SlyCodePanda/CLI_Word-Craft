@@ -19,7 +19,7 @@ Strikes are awarded to player for the following actions:
 1. install python3
 2. download this repository
 3. install the requirements of the repository pip install -r requirements.txt
-4. run 'python3 word-craft' with one of the following flags inside of the folder called CLI_Word-Craft
+4. run `python3 word-craft.py` with one of the following flags inside of the folder called CLI_Word-Craft
 ```
 usage: word-craft.py [-h] [-r | -n]
 
