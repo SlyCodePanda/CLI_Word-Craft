@@ -23,10 +23,15 @@ class Player(object):
     def add_strike(self):
         """
         Adds a strike to the player's strike counter.
-        :return: Nothing.
+        :return: True if player has reached 3 strikes, False otherwise.
         """
 
         self.strikes += 1
+
+        if self.strikes == 3:
+            return True
+        else:
+            return False
 
     def calc_score(self, gen_letter):
         """

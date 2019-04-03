@@ -2,11 +2,14 @@ import os
 import argparse
 import random
 import string
+from nltk.corpus import wordnet
 from colorama import init, Fore, Back, Style
 
 # Player class
 from player import Player
 
+
+# TODO: nltk wordnet is pretty slow, try and find a better alternative.
 
 def display_rules():
     """
@@ -25,8 +28,9 @@ def save_player_score(player_name, score):
     """
     print(Fore.GREEN + "Saving score...")
     print(Style.RESET_ALL)
-    # TODO: Save player name and score to a text file.
-    return
+    # TODO: Save player name and score to a "high score" text file.
+    print("Thanks for playing! Quitting game...")
+    exit()
 
 
 def end_of_game(scenario, score, player):
@@ -43,12 +47,65 @@ def end_of_game(scenario, score, player):
             save_score = input()
             if save_score == 'y':
                 save_player_score(player, score)
+                exit()
+            elif save_score == 'n':
+                print("Thanks for playing! Quitting game...")
+                exit()
+    elif scenario == 'loss':
+        print(Fore.RED + "You have gained 3 strikes. GAME OVER.")
+        print(Style.RESET_ALL)
+        print("Would you like to save your score? y/n")
+        while True:
+            save_score = input()
+            if save_score == 'y':
+                save_player_score(player, score)
                 return
             elif save_score == 'n':
                 print("Thanks for playing! Quitting game...")
-                return
+                exit()
 
-    # TODO: Add loss scenario.
+
+def check_new_word(word, gen_letter, player_obj):
+    """
+     Checks the word entered in the following order:
+        1. Does the word start with the gen_letter?
+        2. Is it a real word?
+        3. Has it already been added to the player's list?
+        If the word passes all these checks, add it to the player's word_list.
+     :param word: Word that needs checking.
+     :param gen_letter: The generated letter for the game.
+     :param player_obj: The list of words that have already been checked and added.
+     :return: Nothing
+    """
+    if word[0] == gen_letter:
+        print("%s starts with %s" % (word, gen_letter))
+        if wordnet.synsets(word):
+            print('%s is a word' % word)
+            if word not in player_obj.word_list:
+                print("%s is not already in you list of words." % word)
+                print(Fore.GREEN + "WORD IS VALID!!")
+                player_obj.word_list.append(word)
+            else:
+                print(Fore.RED + "%s is already in your list. Adding strike" % word)
+                print(Style.RESET_ALL)
+                striker = player_obj.add_strike()
+                # If player has reached 3 strikes.
+                if striker is True:
+                    end_of_game('loss', player_obj.score, player_obj.player_name)
+        else:
+            print(Fore.RED + "%s is not a word. Adding strike" % word)
+            print(Style.RESET_ALL)
+            striker = player_obj.add_strike()
+            # If player has reached 3 strikes.
+            if striker is True:
+                end_of_game('loss', player_obj.score, player_obj.player_name)
+    else:
+        print(Fore.RED + "%s does not start with %s. Adding strike" % (word, gen_letter))
+        print(Style.RESET_ALL)
+        striker = player_obj.add_strike()
+        # If player has reached 3 strikes.
+        if striker is True:
+            end_of_game('loss', player_obj.score, player_obj.player_name)
 
 
 def new_game():
@@ -75,7 +132,7 @@ def new_game():
     player_obj = Player(name)
 
     # Generate a random letter.
-    letters = string.ascii_letters.upper()
+    letters = string.ascii_letters.lower()
     gen_letter = random.choice(letters)
 
     print("Your letter is %s." % gen_letter)
@@ -88,10 +145,13 @@ def new_game():
         print(Fore.BLUE + "Score: %s" % str(player_obj.score))
         print(Style.RESET_ALL)
         given_word = input()
+        given_word = given_word.lower()
 
         if given_word == 'q'.lower():
             end_of_game('quit', player_obj.score, player_obj.player_name)
             exit()
+        else:
+            check_new_word(given_word, gen_letter, player_obj)
 
 
 if __name__ == '__main__':
