@@ -31,8 +31,8 @@ optional arguments:
 
 
 ## Modules Used
-**argparse** - Used for passing arguments on the command line.
-**random** - Used for generating a random number for the random letter generator.
-**string** - Used to create a list of ascii letters to use with random to generate a random selection.
-**PyDictionary** - Using the PyDictionary to check if a word given is a real english word.
-**colorama** - Used to create coloured output in the command line.
+**argparse** - Used for passing arguments on the command line.<br>
+**random** - Used for generating a random number for the random letter generator.<br>
+**string** - Used to create a list of ascii letters to use with random to generate a random selection.<br>
+**PyDictionary** - Using the PyDictionary to check if a word given is a real english word.<br>
+**colorama** - Used to create coloured output in the command line.<br>
