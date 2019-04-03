@@ -14,3 +14,25 @@ Strikes are awarded to player for the following actions:
 * Duplicate word given.
 * A word is given that is not in the dictionary (spelt wrong or jibberish).
 * A word is given that does not start with the generated letter.
+
+## Setup
+1. install python3
+2. download this repository
+3. install the requirements of the repository pip install -r requirements.txt
+4. run 'python3 word-craft' with one of the following flags inside of the folder called CLI_Word-Craft
+```
+usage: word-craft.py [-h] [-r | -n]
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -r, --rules    Display the rules for the game.
+  -n, --newGame  Start a new game.
+```
+
+
+## Modules Used
+**argparse** - Used for passing arguments on the command line.
+**random** - Used for generating a random number for the random letter generator.
+**string** - Used to create a list of ascii letters to use with random to generate a random selection.
+**PyDictionary** - Using the PyDictionary to check if a word given is a real english word.
+**colorama** - Used to create coloured output in the command line.
