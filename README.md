@@ -34,5 +34,8 @@ optional arguments:
 **argparse** - Used for passing arguments on the command line.<br>
 **random** - Used for generating a random number for the random letter generator.<br>
 **string** - Used to create a list of ascii letters to use with random to generate a random selection.<br>
-**PyDictionary** - Using the PyDictionary to check if a word given is a real english word.<br>
+**json** - Used for reading the 'collection.json' file that holds our dictionary.<br>
 **colorama** - Used to create coloured output in the command line.<br>
+<br>
+
+'collection.json' found online [https://boostlog.io/@faisalnad/creating-an-english-dictionary-application-in-python-5aff6da547018500491f48b8 HERE]
