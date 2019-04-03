@@ -38,4 +38,4 @@ optional arguments:
 **colorama** - Used to create coloured output in the command line.<br>
 <br>
 
-'collection.json' found online [https://boostlog.io/@faisalnad/creating-an-english-dictionary-application-in-python-5aff6da547018500491f48b8 HERE]
+'collection.json' found online [HERE](https://boostlog.io/@faisalnad/creating-an-english-dictionary-application-in-python-5aff6da547018500491f48b8)
