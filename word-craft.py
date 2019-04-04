@@ -33,10 +33,29 @@ def display_rules():
         print(Fore.GREEN + rules)
 
 
-def build_highscore_file():
+def store_scores(player_name, score):
+    """
+    Stores the player's score in a dictionary that is saved in a text file.
+    :param player_name: player name
+    :param score: player's score
+    :return: Nothing
+    """
+    new_scores = {player_name: score}
+
+    with open('scores.txt') as f:
+        dic = json.load(f)
+
+    dic.update(new_scores)
+
+    with open('scores.txt', 'w') as f:
+        json.dump(dic, f)
+
+
+def build_score_files():
     """
     Checks if there is already a highscore file in directory.
-    If not, builds one.
+    Also checks if there is a scores json file in directory.
+    If not, builds them.
     :return: Nothing
     """
     if not os.path.isfile("highscores.txt"):
@@ -45,6 +64,11 @@ def build_highscore_file():
                 "== HIGH SCORES ==\n"
                 "=================\n")
         f.close()
+
+    the_og = {"Bitterman": 5}
+    if not os.path.isfile("scores.txt"):
+        with open("scores.txt", 'w') as f:
+            json.dump(the_og, f)
 
 
 def save_player_score(player_name, score):
@@ -56,6 +80,10 @@ def save_player_score(player_name, score):
     #  Then refer to dict to get top 5 high scores and store them in text file from highest to lowest.
     print(Fore.GREEN + "Saving score...")
     print(Style.RESET_ALL)
+
+    store_scores(player_name, score)
+
+    # TODO: Open score json file and get the top 5 highest scores.
 
     with open("highscores.txt", "a+") as f:
         f.write("Player: %s \n"
@@ -150,7 +178,7 @@ def new_game():
     ####################
 
     # Check if there is a highscore file already built.
-    build_highscore_file()
+    build_score_files()
 
     # Read in logo and print.
     with open("word-craft-logo.txt") as f:
@@ -182,7 +210,7 @@ def new_game():
         print(Fore.RED + "------Type 'q' to quit the game.------")
         print(Style.RESET_ALL)
         print("Enter a word beginning with %s: " % gen_letter)
-        print(Fore.BLUE + "Score: %s" % str(player_obj.score))
+        print(Fore.BLUE + "Score: %s" % str(player_obj.score) + Fore.RED + "    Strikes: %s" % str(player_obj.strikes))
         print(Style.RESET_ALL)
         given_word = input()
         given_word = given_word.lower()
