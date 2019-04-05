@@ -61,3 +61,5 @@ class Player(object):
         elif gen_letter == 'W':
             self.score = self.score * 2
 
+        return self.score
+

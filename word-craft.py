@@ -80,20 +80,24 @@ def save_player_score(player_name, score):
     Saves the player's score to a text file score board.
     :return: Nothing.
     """
-    # TODO: Refer to dict to get top 5 high scores and store them in text file from highest to lowest.
     print(Fore.GREEN + "Saving score...")
     print(Style.RESET_ALL)
 
     store_scores(player_name, score)
 
-    # TODO: Open score json file and get the top 5 highest scores.
+    # Open the score dictionary, order it, and store it in 'stored_dic' variable.
     with open('scores.txt') as f:
         dic = json.load(f)
         # Sort dictionary in order of highest score to lowest and store in a Ordered Dict.
         sorting = sorted(dic.items(), reverse=True, key=lambda kv: kv[1])
         sorted_dic = collections.OrderedDict(sorting)
 
-    # Write the top 5 scores to the highscores text file.
+    # Write high score heading to high score file.
+    with open("highscores.txt", "w+") as f:
+        f.write("=== Word Craft ==\n"
+                "== HIGH SCORES ==\n"
+                "=================\n")
+    # Append the top 5 scores to the highscores text file.
     counter = 0
     with open("highscores.txt", "a+") as f:
         for player, score in sorted_dic.items():
@@ -110,19 +114,19 @@ def save_player_score(player_name, score):
     exit()
 
 
-def end_of_game(scenario, score, player):
+def end_of_game(scenario, player):
     """
     Plays the end of game scenario based on whether the player quit or lost.
     :return:
     """
     if scenario == 'quit':
-        print(Fore.RED + "Quitting game. Your final score was %s. " % str(score))
+        print(Fore.RED + "Quitting game. Your final score was %s. " % str(player.score))
         print(Style.RESET_ALL)
         print("Would you like to save your score? y/n")
         while True:
             save_score = input()
             if save_score == 'y':
-                save_player_score(player, score)
+                save_player_score(player.player_name, player.calc_score(player.score))
                 exit()
             elif save_score == 'n':
                 print("Thanks for playing! Quitting game...")
@@ -134,7 +138,7 @@ def end_of_game(scenario, score, player):
         while True:
             save_score = input()
             if save_score == 'y':
-                save_player_score(player, score)
+                save_player_score(player.player_name, player.calc_score(player.score))
                 exit()
             elif save_score == 'n':
                 print("Thanks for playing! Quitting game...")
@@ -169,21 +173,21 @@ def check_new_word(word, gen_letter, player_obj):
                 striker = player_obj.add_strike()
                 # If player has reached 3 strikes.
                 if striker is True:
-                    end_of_game('loss', player_obj.score, player_obj.player_name)
+                    end_of_game('loss', player_obj)
         else:
             print(Fore.RED + "%s is not a word. Adding strike" % word)
             print(Style.RESET_ALL)
             striker = player_obj.add_strike()
             # If player has reached 3 strikes.
             if striker is True:
-                end_of_game('loss', player_obj.score, player_obj.player_name)
+                end_of_game('loss', player_obj)
     else:
         print(Fore.RED + "%s does not start with %s. Adding strike" % (word, gen_letter))
         print(Style.RESET_ALL)
         striker = player_obj.add_strike()
         # If player has reached 3 strikes.
         if striker is True:
-            end_of_game('loss', player_obj.score, player_obj.player_name)
+            end_of_game('loss', player_obj)
 
 
 def new_game():
@@ -230,7 +234,7 @@ def new_game():
         given_word = given_word.lower()
 
         if given_word == 'q'.lower():
-            end_of_game('quit', player_obj.score, player_obj.player_name)
+            end_of_game('quit', player_obj)
             exit()
         else:
             check_new_word(given_word, gen_letter, player_obj)
