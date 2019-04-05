@@ -3,6 +3,7 @@ import os
 import argparse
 import random
 import string
+import collections
 from colorama import init, Fore, Back, Style
 
 # Player class
@@ -40,6 +41,9 @@ def store_scores(player_name, score):
     :param score: player's score
     :return: Nothing
     """
+    # NOTE: Why does this only work when I save it out to a .txt file?? Whenever I tried doing this with .json
+    # it would freak out and throw errors...
+
     new_scores = {player_name: score}
 
     with open('scores.txt') as f:
@@ -76,19 +80,29 @@ def save_player_score(player_name, score):
     Saves the player's score to a text file score board.
     :return: Nothing.
     """
-    # TODO: create a dict of high scores and store in a json file.
-    #  Then refer to dict to get top 5 high scores and store them in text file from highest to lowest.
+    # TODO: Refer to dict to get top 5 high scores and store them in text file from highest to lowest.
     print(Fore.GREEN + "Saving score...")
     print(Style.RESET_ALL)
 
     store_scores(player_name, score)
 
     # TODO: Open score json file and get the top 5 highest scores.
+    with open('scores.txt') as f:
+        dic = json.load(f)
+        # Sort dictionary in order of highest score to lowest and store in a Ordered Dict.
+        sorting = sorted(dic.items(), reverse=True, key=lambda kv: kv[1])
+        sorted_dic = collections.OrderedDict(sorting)
 
+    # Write the top 5 scores to the highscores text file.
+    counter = 0
     with open("highscores.txt", "a+") as f:
-        f.write("Player: %s \n"
-                "Score: %s\n"
-                "=================\n" % (player_name, score))
+        for player, score in sorted_dic.items():
+            f.write("Player: %s \n"
+                    "Score: %s\n"
+                    "=================\n" % (player, score))
+            counter += 1
+            if counter == 5:
+                break
 
     display_highscores()
 
